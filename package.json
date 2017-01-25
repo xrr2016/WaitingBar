@@ -1,0 +1,18 @@
+{
+  "name": "waiting-bar",
+  "version": "0.0.1",
+  "description": "Show a loading bar on the top of web page.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev" : "browser-sync start --server --files '*'"
+  },
+  "keywords": [
+    "Have fun"
+  ],
+  "author": "xrr2016",
+  "license": "MIT",
+  "devDependencies": {
+    "browser-sync": "^2.18.6"
+  }
+}
