@@ -8,31 +8,35 @@
           danger = "#d9534f",
           inverse = "#292b2c",
           faded = "#f7f7f7"
-    const options = {
-            color : 'lightblue',
-            height : 2,
-            direction : 'foward',
-            loacation : 'top',
-            timingFunction : 'ease',
-            shadow : true
-          }
+    const defaultOptions = {
+        height: 2,
+        shadow: true,
+        loacation: 'top',
+        color: danger,
+        direction: 'normal',
+        timingFunction: 'ease-in'
+    }
     class WaitingBar {
-        constructor(tasks = [], options = options) {
+        constructor(tasks = [], options = defaultOptions) {
             this.options = options
-            if(this.options.color === 'random'){
-              this.options.color = this.getRandomColor()
+            if (this.options.color === 'random') {
+                this.options.color = getRandomColor()
             }
-            this.tasks = [...tasks]
+            if (typeof tasks === 'function') {
+                this.tasks = []
+                this.tasks.push(tasks)
+            }
+            this.tasks = tasks
             this.startTime = Date.now()
-            this.animateTime = this.calculateTime(this.tasks) || 4000
+            this.finishTime = this.calculateTime(this.tasks)
+            this.animateTime = this.finishTime - this.startTime
             this.bar = this.createLoadingBar(this.options.color, this.options.height)
             this.animation(this.bar)
         }
         next() {
             const fn = this.tasks.shift()
-            setTimeout(() => {
-                fn && fn()
-            }, 0)
+                  !!fn && fn()
+              return Date.now()
         }
         createLoadingBar(color, height) {
             const bar = D.createElement('div')
@@ -40,46 +44,66 @@
             D.body.appendChild(bar)
             return bar
         }
-        getRandomColor() {
-            let color = "#",
-                letters = '0123456789ABCDEF'
-            for (let i = 0; i < 6; i++) {
-                color += letters[Math.round(Math.random() * letters.length)]
-            }
-            return color
-        }
         calculateTime(tasks) {
-            while (tasks.length > 0) {
-                this.next()
-                if (tasks.length === 0) {
-                    return Date.now() - this.startTime
-                }
+            while(tasks.length > 0){
+              const fn = ((tasks) => {
+                const task = tasks.shift()
+                !!task && task()
+              })(tasks)
+            }
+            if(tasks.length <= 0){
+              return Date.now()
             }
         }
         animation(element) {
-            element.animate([
-                { width: '0%'},
-                { width: '100%' }
-            ], {
-                duration: 4000,
-                easing: this.options.timingFunction,
-                direction :this.options.direction,
-                iterations: Infinity
-            })
+          if(element.animate){
+            console.log(this.animateTime)
+              element.animate([
+                  { width: '0%' },
+                  { width: '100%' }
+              ], {
+                  duration: this.animateTime,
+                  easing: this.options.timingFunction,
+                  direction: this.options.direction
+              })
+          } else {
+              this.widen(element,this.calculateTime(this.tasks) - this.startTime)
+          }
+        }
+        widen(element,time){
+          let setWidth = setInterval(() => {
+              let width = parseInt(element.style.width,10)
+              width++
+              element.style.width = width + '%'
+              if(element.style.width === '100%'){
+                clearInterval(setWidth)
+                element.style.display = 'none'
+              }
+            }, time / 100)
         }
         getStyle(element) {
             element.style.position = 'absolute'
-            this.options.loacation === 'top' ? (element.style.top = 0 + 'px'):(element.style.bottom = 0+'px')
+            this.options.loacation === 'top' ? (element.style.top = 0 + 'px') : (element.style.bottom = 0 + 'px')
             element.style.left = 0 + 'px'
             element.style.width = 0 + '%'
             element.style.height = this.options.height + 'px'
-            element.style.backgroundColor = this.options.color
+            element.style.backgroundColor = `linear-gradient:(to left,${this.options.color} 1%,blue)`
             element.style.boxShadow = this.options.shadow ? '0 2px 2px rgba(0,0,0,.2)' : null
             return element
         }
     }
+
     function aWaitingBar(tasks, options) {
-        return new WaitingBar(tasks,options)
+        return new WaitingBar(tasks, options)
+    }
+
+    function getRandomColor() {
+        let color = "#",
+            letters = '0123456789ABCDEF'
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.round(Math.random() * letters.length)]
+        }
+        return color
     }
     W.aWaitingBar = aWaitingBar
     W.WaitingBar = WaitingBar

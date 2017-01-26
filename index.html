@@ -1,44 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Waiting.js</title>
-  <style media="screen">
-   body{
-     background-color: #f4f4f4;
-     padding-top: 80px;
-   }
-   .bar{
-     background: linear-gradient(to right,#fff,lightblue);
-     width: 0px;
-     height: 10px;
-     animation: widen 5s ease-in infinite;
-   }
-   @keyframes widen {
-     0%{
-        width: 0%;
-     }
-     100%{
-      width: 100%;
-     }
-   }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Waiting.js</title>
+    <style media="screen">
+        body {
+            background-color: #f4f4f4;
+            padding-top: 80px;
+        }
+
+        .bar {
+            background: linear-gradient(to right, #fff, lightblue);
+            width: 0px;
+            height: 10px;
+            animation: widen 5s ease-in infinite;
+        }
+
+        @keyframes widen {
+            0% {
+                width: 0%;
+            }
+            100% {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <h1>WaitingBar</h1>
-  <div class="bar"></div>
-  <script src="./WaitingBar.js" charset="utf-8"></script>
-  <script src="./things.js" charset="utf-8"></script>
-  <script type="text/javascript">
-    function fn1(){
-      const a = 'start function'
-      setTimeout(()=>{
-        console.log(a)
-      },5000)
-    }
-    aWaitingBar(fn1,{})
-  </script>
+    <h1>WaitingBar</h1>
+    <div class="bar"></div>
+    <script src="./WaitingBar.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        function fn1() {
+            let i = 0
+            while (i < 1999) {
+                i++
+                console.log(i)
+            }
+        }
+        aWaitingBar([fn1,fn1,fn1,fn1])
+    </script>
 </body>
+
 </html>
