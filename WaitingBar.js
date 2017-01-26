@@ -9,7 +9,7 @@
           inverse = "#292b2c",
           faded = "#f7f7f7"
     const defaultOptions = {
-        height: 2,
+        height: 3,
         shadow: true,
         loacation: 'top',
         color: danger,
@@ -17,8 +17,13 @@
         timingFunction: 'ease-in'
     }
     class WaitingBar {
-        constructor(tasks = [], options = defaultOptions) {
-            this.options = options
+        constructor(tasks = [], options) {
+            this.options = Object.create(defaultOptions)
+            for (let key in this.options) {
+                if (options.hasOwnProperty(key)) {
+                  this.options[key] = options[key]
+                }
+              }
             if (this.options.color === 'random') {
                 this.options.color = getRandomColor()
             }
@@ -57,7 +62,6 @@
         }
         animation(element) {
           if(element.animate){
-            console.log(this.animateTime)
               element.animate([
                   { width: '0%' },
                   { width: '100%' }
@@ -67,7 +71,7 @@
                   direction: this.options.direction
               })
           } else {
-              this.widen(element,this.calculateTime(this.tasks) - this.startTime)
+              this.widen(element,this.animateTime)
           }
         }
         widen(element,time){
@@ -87,7 +91,7 @@
             element.style.left = 0 + 'px'
             element.style.width = 0 + '%'
             element.style.height = this.options.height + 'px'
-            element.style.backgroundColor = `linear-gradient:(to left,${this.options.color} 1%,blue)`
+            element.style.background = `linear-gradient(to left,${this.options.color},#f4f4f4)`
             element.style.boxShadow = this.options.shadow ? '0 2px 2px rgba(0,0,0,.2)' : null
             return element
         }
