@@ -11,7 +11,7 @@
      padding-top: 80px;
    }
    .bar{
-     background-color: lightblue;
+     background: linear-gradient(to right,#fff,lightblue);
      width: 0px;
      height: 10px;
      animation: widen 5s ease-in infinite;
@@ -32,7 +32,13 @@
   <script src="./WaitingBar.js" charset="utf-8"></script>
   <script src="./things.js" charset="utf-8"></script>
   <script type="text/javascript">
-    aWaitingBar()
+    function fn1(){
+      const a = 'start function'
+      setTimeout(()=>{
+        console.log(a)
+      },5000)
+    }
+    aWaitingBar(fn1,{})
   </script>
 </body>
 </html>
