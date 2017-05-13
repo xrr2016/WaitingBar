@@ -1,5 +1,3 @@
 ## Waiting.js
 
 >
-
-[Demo]()
